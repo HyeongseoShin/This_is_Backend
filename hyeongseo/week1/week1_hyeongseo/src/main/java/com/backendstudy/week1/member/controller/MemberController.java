@@ -1,5 +1,6 @@
 package com.backendstudy.week1.member.controller;
 
+import com.backendstudy.week1.common.ApiResponse;
 import com.backendstudy.week1.member.dto.MemberReqDto;
 import com.backendstudy.week1.member.dto.MemberResDto;
 import com.backendstudy.week1.member.service.MemberService;
@@ -23,12 +24,9 @@ public class MemberController {
     public ResponseEntity<?> createMember(@Valid @RequestBody MemberReqDto memberDto) {
         MemberResDto created = memberService.create(memberDto);
 
-        System.out.println("name: " + created.getName());
-        System.out.println("email: " + created.getEmail());
-
          return ResponseEntity
                  .status(HttpStatus.CREATED)
-                 .body(created);
+                 .body(ApiResponse.success(201, "회원 등록 성공", created));
     }
 
     // 전체 회원 조회 or 회원 email로 조회
@@ -36,11 +34,19 @@ public class MemberController {
     public ResponseEntity<?> getMember(@RequestParam(required = false) String email) {
         if(email != null) {
             MemberResDto member = memberService.get(email);
-            return ResponseEntity.ok(member);
+            // return ResponseEntity.ok(member);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponse.success(200, "이메일로 회원 조회 성공", member));
         }
         else {
             List<MemberResDto> memberList = memberService.getAll();
-            return ResponseEntity.ok(memberList);
+            // return ResponseEntity.ok(memberList);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(ApiResponse.success(200, "전체 회원 조회 성공", memberList));
         }
     }
 
@@ -49,7 +55,11 @@ public class MemberController {
     public ResponseEntity<?> updateMember(@PathVariable Long id, @RequestBody MemberReqDto memberDto) {
         MemberResDto updated = memberService.update(id, memberDto);
 
-        return ResponseEntity.ok(updated);
+        // return ResponseEntity.ok(updated);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(200, "회원 정보 수정 성공", updated));
     }
 
     // 회원 삭제
@@ -57,6 +67,10 @@ public class MemberController {
     public ResponseEntity<?> deleteMember(@PathVariable Long id) {
         memberService.delete(id);
 
-        return ResponseEntity.noContent().build();
+        // return ResponseEntity.noContent().build();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(200, "회원 삭제 성공", null));
     }
 }

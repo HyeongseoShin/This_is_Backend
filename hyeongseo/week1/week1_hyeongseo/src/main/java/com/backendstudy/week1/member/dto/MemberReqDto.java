@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 // 회원 Request용 Dto (이름, 이메일, 비밀 번호)
+// 유효성 검사 추가
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
